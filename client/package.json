@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.12.7",
+    "@clerk/nextjs": "^6.10.2",
+    "@clerk/vue": "^1.1.7",
     "@quasar/extras": "^1.16.4",
     "@vue/apollo-composable": "^4.2.1",
     "@vue/apollo-option": "^4.2.0",

@@ -14,6 +14,11 @@ const Messages = sequelize.define('messages', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  chatId: 
+  {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  }
   
 },{
   timestamps: true,

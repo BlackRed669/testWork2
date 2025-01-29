@@ -2,43 +2,37 @@
   <q-item
     clickable
     tag="a"
-    target="_blank"
-    :href="props.link"
+    :href="props.connectUser"
   >
-    <q-item-section
+    <!-- <q-item-section
       v-if="props.icon"
       avatar
-    >
+    > 
       <q-icon :name="props.icon" />
-    </q-item-section>
+    </q-item-section> -->
 
     <q-item-section>
-      <q-item-label>{{ props.title }}</q-item-label>
-      <q-item-label caption>{{ props.caption }}</q-item-label>
+      <q-item-label>{{ props.connectName }}</q-item-label>
+      <q-item-label lastContent>{{ props.lastContent }}</q-item-label>
     </q-item-section>
   </q-item>
 </template>
 
 <script setup>
 const props = defineProps({
-  title: {
+  connectName: {
     type: String,
     required: true
   },
 
-  caption: {
+  lastContent: {
     type: String,
     default: ''
   },
 
-  link: {
-    type: String,
-    default: '#'
+  connectUser: {
+    type: Number,
+    default: 0
   },
-
-  icon: {
-    type: String,
-    default: ''
-  }
 })
 </script>

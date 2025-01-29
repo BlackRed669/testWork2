@@ -1,4 +1,36 @@
 <template>
+ <div class="q-pa-md row justify-center">
+    <div style="width: 100%; max-width: 400px">
+      
+      <q-chat-message
+        name="Me"
+        :text="['hey, how are you?']"
+        sent
+      />
+      <q-chat-message
+        name="Me"
+        :text="['hey, how are you?']"
+        
+      />
+      <q-chat-message
+        name="me"
+        :text="['doing fine, how r you?']"
+        sent
+      />
+      <q-chat-message
+        name="Jane1"
+        :text="['doing fine, how r you?']"
+      />
+      <q-chat-message
+        name="Jane"
+        :text="['doing fine, how r you?']"
+      /> 
+      
+    </div>
+  </div>
+
+
+
   <q-page>
     <div>
       <q-input v-model="fromTo" label="Your login ID" />
@@ -22,6 +54,7 @@ export default {
     const message = ref('');
     const fromTo = ref('');
     const messages = ref([]);
+    const toId = '1';
 
     // Слушаем события от сервера
     onMounted(() => {
@@ -35,14 +68,19 @@ export default {
 
       let formData = {
         "value": message.value,
-        "fromId": fromTo.value
+        "fromId": fromTo.value,
+        "toId": toId
       };
-
-
-      socket.emit('message', formData);
+      socket.emit('sendSMS', formData);
       message.value = ''; // Очищаем поле ввода
     };
 
+    const getSMS = () => {
+      socket.emit('getSMS');
+      
+    };
+
+    console.log(getSMS);
     return {
       message,
       messages,

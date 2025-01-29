@@ -2,12 +2,10 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const sequelize = require('./sequelize.js');
-const { execute, subscribe } = require('graphql');
-// const Messages = require('./models/message.js');
+const Messages = require('./models/message.js');
 const { ApolloServer } = require('apollo-server');
-const { SubscriptionServer } = require('subscriptions-transport-ws');
-const typeDefs = require("./schema/messagesSchema.js");
-const resolvers = require("./resolvers/messagesResolvers.js");
+const typeDefs = require("./schema/index.js");
+const resolvers = require("./resolvers/index.js");
 
 const app = express();
 const server = http.createServer(app);
@@ -25,13 +23,17 @@ io.on('connection', (socket) => {
   socket.emit('welcome', { message: 'Welcome to the server!' });
 
   // Обработка события от клиента
-  socket.on('message', async (data) => {
+  socket.on('sendSMS', async (data) => {
     console.log('Received message:', data);
 
-    //let result = await Messages.create({ toId, content, fromId });
+    let toId = data.toId;
+    let content = data.value;
+    let fromId = data.fromId;
+
+    let result = await Messages.create({ toId, content, fromId });
     console.log(result);
     // Отправка ответа
-    socket.emit('response', { message: `Server got your message: ${data}` });
+    io.to("NoC6Y0dWLfEsdHzjAAAD").emit('getSMS', { message: `Server got your message: ${data}` });
   });
 
   // Обработка отключения клиента
@@ -47,17 +49,7 @@ server.listen(PORT, () => {
 });
 
 const serverApollo = new ApolloServer({ typeDefs, resolvers });
-const httpServer = http.createServer(serverApollo);
 
 serverApollo.listen().then(({ url }) => {
-  new SubscriptionServer({
-    execute,
-    subscribe,
-    typeDefs,
-  }, {
-    server: httpServer,
-    path: '/graphql',
-  });
-
   console.log(`Server http is running on ${url}`);
 });

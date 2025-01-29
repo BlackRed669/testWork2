@@ -6,20 +6,9 @@
 </template>
 
 <script>
-import { useQuery, provideApolloClient } from "@vue/apollo-composable"
+import { useQuery } from "@vue/apollo-composable"
 import gql from "graphql-tag"
-import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client/core"
 
-const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql",
-})
-
-const cache = new InMemoryCache();
-const apolloClient = new ApolloClient({
-  link: httpLink,
-  cache,
-});
-provideApolloClient(apolloClient);
 
 const result = useQuery(gql`
       query getMyMessages 

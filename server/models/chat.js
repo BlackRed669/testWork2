@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../sequelize'); // Импортируйте вашу настройку sequelize
+const sequelize = require('../sequelize');
 
 const Chat = sequelize.define('chats', {
     hostUser: {

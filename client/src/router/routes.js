@@ -6,17 +6,12 @@ const routes = [
       { path: '', component: () => import('pages/IndexPage.vue') }
     ]
   },
-
+ 
   {
-    path: '/chat',
+    path: '/chat/:chatId/:userId',
     component: () => import('layouts/MainLayout.vue'),
-    children: [
-      { path: '', component: () => import('src/components/my-contacts.vue') }
-    ]
-  },
-  {
-    path: '/chatOld',
-    component: () => import('layouts/MainLayout.vue'),
+    name: 'chat',
+    props: true,
     children: [
       { path: '', component: () => import('components/my-chat.vue') }
     ]
@@ -27,6 +22,7 @@ const routes = [
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue')
   }
+  
 ]
 
 export default routes

@@ -4,10 +4,8 @@ export const socket = io('http://localhost:3000');
 export default ({ app }) => {
     // Создаем подключение к серверу
 
-
     // Глобально предоставляем сокет через provide/inject
     app.config.globalProperties.$socket = socket;
-    // provide(SOCKET_KEY, socket);
 
     // Обработка событий при подключении
     socket.on('connect', () => {

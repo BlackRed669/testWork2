@@ -1,16 +1,21 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../sequelize'); // Импортируйте вашу настройку sequelize
+const sequelize = require('../sequelize');
 
 const User = sequelize.define('users', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    email: {
+    clerkId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    socketId: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    password: {
+    icon: {
         type: DataTypes.STRING,
         allowNull: false,
     },

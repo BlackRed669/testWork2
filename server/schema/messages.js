@@ -6,12 +6,19 @@ module.exports = gql`
     messages(toId:Int): [Message]
   }
 
+  type Query {
+    history(myId:Int,chatId:Int): [Message]
+  }
+
   type Message {
     id: ID
     content: String
     fromId: Int
     toId: Int
     chatId: Int
+    message: String
+    sent: Boolean
+    name: String
   }
     
   enum SortOrder {
@@ -19,7 +26,4 @@ module.exports = gql`
     DESC
   }
 
-  type Mutation {
-    sendMessage(content: String!, userId: String!): Message
-  }
 `;

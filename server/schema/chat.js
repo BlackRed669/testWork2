@@ -12,15 +12,12 @@ module.exports = gql`
     connectUser: Int
     lastContent: String
     connectName: String
+    icon: String
   }
     
   enum SortOrder {
     ASC
     DESC
-  }
-
-  type Mutation {
-   createChat(hostId: Int!, connectId: Int!): Chat
   }
 
 `;

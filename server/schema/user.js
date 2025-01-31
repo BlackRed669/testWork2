@@ -6,22 +6,24 @@ module.exports = gql`
     users(myId:Int): [User]
   }
 
+  type Query {
+    getAllUsers(myId:String):[User]
+  }
+
   type User {
     id: ID
     name: String
-    email: String
-    password: String
+    clerkId: String
+    socketId: String
+    icon: String
+    chatId:Int
+    message:String
+    connectUserId:Int
   }
     
   enum SortOrder {
     ASC
     DESC
   }
-
-  type Mutation {
-   createChat(hostId: Int!, connectId: Int!): Chat
-  }
-
-  
 
 `;

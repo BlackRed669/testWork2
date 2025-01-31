@@ -24,7 +24,7 @@ module.exports = {
               order: [['createdAt', 'DESC']],
             });
 
-            let secondUser = c.hostUser === myId ? c.connectUser : (c.connectUser === myId ? c.hostUser : myId);
+            let secondUser = c.hostUser === myId ? c.connectUser : c.hostUser;
 
             const user = await User.findByPk(secondUser);
 
@@ -33,9 +33,9 @@ module.exports = {
               connectName: user.name,
               lastContent: lastMessage ? lastMessage.content : null,
               connectUser: secondUser,
+              icon: user.icon,
             };
 
-            console.log(result);
             return result;
           })
         );

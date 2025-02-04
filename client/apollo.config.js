@@ -3,7 +3,7 @@ module.exports = {
       service: {
         name: 'chatQuasar',
         // URL to the GraphQL API
-        url: 'https://testwork2.onrender.com:4000/graphql',
+        url: 'https://testwork2.onrender.com/graphql',
       },
       // Files processed by the extension
       includes: [

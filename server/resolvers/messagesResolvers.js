@@ -1,6 +1,6 @@
-const Chat = require('../models/chat.js');
-const Messages = require('../models/message.js');
-const User = require('../models/user.js');
+const Chat = require("../models/chat.js");
+const Messages = require("../models/message.js");
+const User = require("../models/user.js");
 
 module.exports = {
   Query: {
@@ -10,7 +10,7 @@ module.exports = {
         where: {
           toId: toId,
         },
-        order: [['createdAt', 'DESC']],
+        order: [["createdAt", "DESC"]],
       });
     },
 
@@ -20,11 +20,10 @@ module.exports = {
         where: {
           chatId: chatId,
         },
-        order: [['createdAt', 'asc']],
+        order: [["createdAt", "asc"]],
       });
 
       let user = await User.findByPk(myId);
-
 
       let chat = await Chat.findByPk(chatId);
 

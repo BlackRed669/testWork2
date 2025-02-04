@@ -22,31 +22,29 @@
 </template>
 
 <script>
-import { ref, onMounted, reactive } from 'vue';
-import { socket } from 'boot/socket';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { ref, onMounted, reactive } from "vue";
+import { socket } from "boot/socket";
+import { useRoute, onBeforeRouteUpdate } from "vue-router";
 import { useQuery } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 
 export default {
   setup() {
-    const myMessage = ref('');
+    const myMessage = ref("");
     let messages = ref([]);
     const route = useRoute();
-
 
     onBeforeRouteUpdate((to, from, next) => {
       next();
       getHistory(to.params.chatId, to.params.userId);
     });
 
-
     onMounted(() => {
       getHistory();
 
     });
 
-    socket.on('getSMS', (data) => {
+    socket.on("getSMS", (data) => {
       messages.value.push(data);
     });
 
@@ -55,8 +53,8 @@ export default {
         "content": myMessage.value,
         "chatId": route.params.chatId,
       };
-      socket.emit('sendSMS', formData);
-      myMessage.value = ''; // Очищаем поле ввода
+      socket.emit("sendSMS", formData);
+      myMessage.value = ""; // Очищаем поле ввода
     };
 
     function getHistory(chatId, userId) {

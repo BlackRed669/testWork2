@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../sequelize');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../sequelize");
 
-const Chat = sequelize.define('chats', {
+const Chat = sequelize.define("chats", {
     hostUser: {
         type: DataTypes.INTEGER,
         allowNull: false,

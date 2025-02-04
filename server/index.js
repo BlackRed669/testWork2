@@ -1,33 +1,33 @@
-const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
-const { ApolloServer } = require('apollo-server');
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+const { ApolloServer } = require("apollo-server");
 //GraphQL
 const typeDefs = require("./schema/index.js");
 const resolvers = require("./resolvers/index.js");
 //Модели
-const User = require('./models/user.js');
-const Messages = require('./models/message.js');
-const Chat = require('./models/chat.js');
+const User = require("./models/user.js");
+const Messages = require("./models/message.js");
+const Chat = require("./models/chat.js");
 const { Op } = require("sequelize");
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    methods: ['GET', 'POST']
+    methods: ["GET", "POST"]
   }
 });
 
 // Обработка подключения сокетов
-io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id);
+io.on("connection", (socket) => {
+  console.log("A user connected:", socket.id);
 
   // Пример отправки сообщения клиенту
-  socket.emit('welcome', { message: 'Welcome to the server!' });
+  socket.emit("welcome", { message: "Welcome to the server!" });
 
   // Обработка события от клиента
-  socket.on('sendSMS', async (data) => {
+  socket.on("sendSMS", async (data) => {
 
     let chatId = data.chatId;
     let content = data.content;
@@ -45,16 +45,16 @@ io.on('connection', (socket) => {
     const connectUser = await User.findByPk(toId);
 
     // Отправка ответа
-    io.to(connectUser.socketId).emit('getSMS', { message: content, sent: false, name: '', id: result.id });
-    io.to(fromUser.socketId).emit('getSMS', { message: content, sent: true, name: '', id: result.id });
+    io.to(connectUser.socketId).emit("getSMS", { message: content, sent: false, name: "", id: result.id });
+    io.to(fromUser.socketId).emit("getSMS", { message: content, sent: true, name: "", id: result.id });
   });
 
 
   //TODO: Вынести функции сокетов в подобие сервисов
 
 
-  socket.on('appendUser', async (data) => {
-    let upsert1 = '';
+  socket.on("appendUser", async (data) => {
+    let upsert1 = "";
     let users = JSON.parse(data.userValue1);
     if (users) {
       const [user, created] = await User.upsert({
@@ -71,12 +71,12 @@ io.on('connection', (socket) => {
         }
       );
 
-      io.to(socket.id).emit('getUserId', user.id);
+      io.to(socket.id).emit("getUserId", user.id);
     }
   });
 
 
-  socket.on('findChat', async (data) => {
+  socket.on("findChat", async (data) => {
 
     let user = await User.findByPk(data.connectUser);
 
@@ -94,11 +94,10 @@ io.on('connection', (socket) => {
 
     if (findChat)
     {
-      io.to(socket.id).emit('createChat', findChat);
-      io.to(user.socketId).emit('createChat', findChat);
+      io.to(socket.id).emit("createChat", findChat);
+      io.to(user.socketId).emit("createChat", findChat);
       return;
     }
-      
 
     let hostUser = data.hostUser;
     let connectUser = data.connectUser;
@@ -106,17 +105,15 @@ io.on('connection', (socket) => {
     let result = await Chat.create({ hostUser, connectUser });
     if (result)
     {
-      io.to(socket.id).emit('createChat', result);
-      io.to(user.socketId).emit('createChat', result);
+      io.to(socket.id).emit("createChat", result);
+      io.to(user.socketId).emit("createChat", result);
       
     }
-
-
   });
 
   // Обработка отключения клиента
-  socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
   });
 });
 

@@ -16,7 +16,7 @@
         </SignedIn>
 
         <div v-if="!isLoaded">
-          ga ga ezy
+          Loading...
         </div>
 
         <div v-else-if="isSignedIn">Hello {{ user?.fullName }} {{ user?.username }}!</div>
@@ -43,25 +43,20 @@
 </template>
 
 <script setup>
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/vue'
-import { ref, reactive, watch } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/vue"
+import { ref, reactive, watch } from "vue"
+import EssentialLink from "components/EssentialLink.vue"
 import { useQuery } from "@vue/apollo-composable"
 import gql from "graphql-tag"
-import { socket } from 'boot/socket';
-
+import { socket } from "boot/socket";
 
 const { isSignedIn, user, isLoaded } = useUser();
-
 const state = reactive({ linksList: [] });
-
 const loadUser = ref(isLoaded);
-
 
 watch(loadUser, () => {
   appendUser();
 })
-
 
 function appendUser() {
 
@@ -69,11 +64,9 @@ function appendUser() {
     userValue1: JSON.stringify(user.value),
   });
 
-  socket.emit('appendUser', variables);
+  socket.emit("appendUser", variables);
   getLinks(user.value?.id);
 }
-
-
 
 function getLinks(myClerkId) {
   if (myClerkId) {
@@ -91,7 +84,7 @@ function getLinks(myClerkId) {
           id
           connectUserId
         }
-      }`, variables,{fetchPolicy: 'no-cache'}
+      }`, variables,{fetchPolicy: "no-cache"}
     ).onResult(
       (res) => {
         if (res.data) {

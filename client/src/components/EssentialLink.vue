@@ -14,9 +14,9 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
-import { socket } from 'boot/socket';
+import { reactive } from "vue";
+import { useRouter } from "vue-router";
+import { socket } from "boot/socket";
 
 const router = useRouter();
 const props = defineProps({
@@ -27,7 +27,7 @@ const props = defineProps({
 
   message: {
     type: String,
-    default: ''
+    default: ""
   },
 
   chatId: {
@@ -47,13 +47,13 @@ const props = defineProps({
 
   icon: {
     type: String,
-    default: ''
+    default: ""
   }
 })
 
 let chatId = reactive(props.chatId);
 
-socket.on('createChat', (data) => {
+socket.on("createChat", (data) => {
   if (data.hostUser == props.connectUserId) {
     chatId = data.id;
   }
@@ -67,7 +67,7 @@ function createChat() {
       hostUser: props.id,
       connectUser: props.connectUserId
     });
-    socket.emit('findChat', variables);
+    socket.emit("findChat", variables);
   }
   else {
     router.push("/chat/" + chatId + "/" + props.id);

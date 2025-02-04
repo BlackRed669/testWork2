@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../sequelize');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../sequelize");
 
-const Messages = sequelize.define('messages', {
+const Messages = sequelize.define("messages", {
   toId: {
     type: DataTypes.INTEGER,
     allowNull: false,

@@ -79,7 +79,7 @@ export default defineConfig((/* ctx */) => {
     devServer: {
       https: true, // Настройте на true, если используете HTTPS
       host: '0.0.0.0', // Разрешает доступ извне
-      port: 9000, // Порт вашего приложения
+      port: 8080, // Порт вашего приложения
       open: true, // opens browser window automatically
       allowedHosts: [
         'testwork2-front.onrender.com', // Замените на ваши разрешенные хосты

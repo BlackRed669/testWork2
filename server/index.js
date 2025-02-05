@@ -59,7 +59,7 @@ io.on("connection", (socket) => {
     if (users) {
       const [user, created] = await User.upsert({
         socketId: socket.id,
-        name: users.fullName,
+        name: users.fullName ?? "NoName",
         clerkId: users.id,
         icon: users.imageUrl,
       },

@@ -74,6 +74,7 @@ export default {
     });
 
     socket.on("getSMS", (data) => {
+      if(data.chatId == route.params.chatId)
       messages.value.push(data);
     });
 

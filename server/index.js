@@ -45,8 +45,8 @@ io.on("connection", (socket) => {
     const connectUser = await User.findByPk(toId);
 
     // Отправка ответа
-    io.to(connectUser.socketId).emit("getSMS", { message: content, sent: false, name: "", id: result.id });
-    io.to(fromUser.socketId).emit("getSMS", { message: content, sent: true, name: "", id: result.id });
+    io.to(connectUser.socketId).emit("getSMS", { message: content, sent: false, name: "", id: result.id, chatId: chatId });
+    io.to(fromUser.socketId).emit("getSMS", { message: content, sent: true, name: "", id: result.id, chatId: chatId });
   });
 
 

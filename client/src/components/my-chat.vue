@@ -112,7 +112,7 @@ export default {
               name
               icon
             }
-          }`, variables
+          }`, variables, {fetchPolicy: 'no-cache'}
       ).onResult(
         (res) => {
           if (res.data) {

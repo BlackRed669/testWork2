@@ -7,7 +7,8 @@
 
       <q-item-section>
         <q-item-label>{{ props.name }}</q-item-label>
-        <q-item-label message>{{ props.message }}</q-item-label>
+        <q-item-label message>{{ (lastMessage.length > 10) ? (lastMessage).substring(0, 10) + "..." : lastMessage
+          }}</q-item-label>
       </q-item-section>
       <q-item-section>
         <q-item-label>{{ active }}</q-item-label>
@@ -61,10 +62,17 @@ const props = defineProps({
 
 let chatId = reactive(props.chatId);
 let active = ref(props.active);
+let lastMessage = ref(props.message);
 
-socket.on('on_offline', (data) => {
+socket.on("on_offline", (data) => {
   if (props.connectUserId == data.id) {
     active.value = data.online;
+  }
+});
+
+socket.on("getSMS",(data) => {
+  if (props.chatId == data.chatId) {
+    lastMessage.value = data.message;
   }
 });
 
@@ -92,11 +100,11 @@ function createChat() {
 
 </script>
 <style>
-.clickeble{
+.clickeble {
   cursor: pointer;
 }
 
-.circleIcon{
+.circleIcon {
   border-radius: 50%;
 }
 </style>

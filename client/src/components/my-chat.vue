@@ -66,7 +66,7 @@ export default {
     onUpdated(() => {
       let div = document.getElementById("chatDiv").lastElementChild;
       if (div)
-        div.scrollIntoView({ behavior: 'smooth' })
+        div.scrollIntoView({ behavior: "smooth" })
     });
 
     onMounted(() => {
@@ -74,8 +74,8 @@ export default {
     });
 
     socket.on("getSMS", (data) => {
-      if(data.chatId == route.params.chatId)
-      messages.value.push(data);
+      if (data.chatId == route.params.chatId)
+        messages.value.push(data);
     });
 
     const sendMessage = () => {
@@ -113,7 +113,7 @@ export default {
               name
               icon
             }
-          }`, variables, {fetchPolicy: 'no-cache'}
+          }`, variables, { fetchPolicy: "no-cache" }
       ).onResult(
         (res) => {
           if (res.data) {
@@ -144,7 +144,8 @@ export default {
   max-height: 500px;
   overflow: auto;
 }
-.border-bottom{
+
+.border-bottom {
   border-bottom: 2px solid #00000011;
 }
 </style>

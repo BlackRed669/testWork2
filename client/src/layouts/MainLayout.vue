@@ -66,7 +66,7 @@ function appendUser() {
   socket.emit("appendUser", variables);
 }
 
-socket.on('getLinks',(data)=>{
+socket.on("getLinks",(data)=>{
   state.linksList = data;
 });
 

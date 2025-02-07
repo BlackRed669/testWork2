@@ -8,7 +8,6 @@ module.exports = {
 
     getUser: async (_, { myId, chatId }) => {
       if (myId && chatId) {
-        console.log("kwehfiewfh");
         let user = await User.findByPk(myId);
         let chat = await Chat.findByPk(chatId);
         let connectUserId = chat.hostUser === user.id ? chat.connectUser : chat.hostUser;

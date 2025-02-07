@@ -45,8 +45,21 @@ io.on("connection", (socket) => {
     const connectUser = await User.findByPk(toId);
 
     // Отправка ответа
-    io.to(connectUser.socketId).emit("getSMS", { message: content, sent: false, name: "", id: result.id, chatId: chatId });
-    io.to(fromUser.socketId).emit("getSMS", { message: content, sent: true, name: "", id: result.id, chatId: chatId });
+    io.to(connectUser.socketId).emit("getSMS", {
+      message: content,
+      sent: false,
+      name: "",
+      id: result.id,
+      chatId: chatId
+    });
+    
+    io.to(fromUser.socketId).emit("getSMS", {
+      message: content,
+      sent: true,
+      name: "",
+      id: result.id,
+      chatId: chatId
+    });
   });
 
 
@@ -78,8 +91,6 @@ io.on("connection", (socket) => {
         where: { clerkId: users.id },
       });
 
-
-
       socket.broadcast.emit("on_offline", { online: "Online", id: myUser.id });
 
       let secondUser = await User.findAll({
@@ -89,9 +100,7 @@ io.on("connection", (socket) => {
         order: [["updatedAt", "DESC"]],
       });
 
-
       let result = [];
-
 
       for (let u of secondUser) {
         let chats = await Messages.findOne({
@@ -113,7 +122,6 @@ io.on("connection", (socket) => {
       }
 
       io.to(socket.id).emit("getLinks", result);
-
     }
   });
 
@@ -157,7 +165,7 @@ io.on("connection", (socket) => {
       where: { socketId: socket.id },
     });
     if (user) {
-      user.active = 'Offline';
+      user.active = "Offline";
       await user.save();
       socket.broadcast.emit("on_offline", { online: "Offline", id: user.id });
     }

@@ -1,28 +1,32 @@
 <template>
-  <div class="q-pa-md row justify-center">
-    <div style="padding: 10px; width: 100%;  max-height: 500px; overflow: auto;">
+  <div>
+    <div class="q-pa-md row justify-center">
+      <div style="padding: 10px; width: 100%;  max-height: 500px; overflow: auto;" id="qwert">
 
-      <div v-for="message in this.messages" :key="message.id" :id="message.id">
-        <q-chat-message :name="message.name" :sent="message.sent">
-          <div>
-            {{ message.message }}
-          </div>
-        </q-chat-message>
+        <div v-for="message in this.messages" :key="message.id" :id="message.id" class="justify-end">
+          <q-chat-message :name="message.name" :sent="message.sent">
+            <div>
+              {{ message.message }}
+            </div>
+          </q-chat-message>
+        </div>
+
       </div>
+    </div>
 
+    <div>
+      <q-input v-model="myMessage" bg-color="white" class="full-width" outlined rounded dense label="Your message"
+        @keyup.enter="sendMessage">
+        <template v-slot:after>
+          <q-btn round color="primary" icon="navigation" @click="sendMessage" />
+        </template>
+      </q-input>
     </div>
   </div>
-
-  <q-page>
-    <div>
-      <q-input v-model="myMessage" label="Your message" />
-      <q-btn label="Отправить" @click="sendMessage" />
-    </div>
-  </q-page>
 </template>
 
 <script>
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted, reactive, onUpdated } from "vue";
 import { socket } from "boot/socket";
 import { useRoute, onBeforeRouteUpdate } from "vue-router";
 import { useQuery } from "@vue/apollo-composable";
@@ -39,9 +43,14 @@ export default {
       getHistory(to.params.chatId, to.params.userId);
     });
 
+    onUpdated(() => {
+      let div = document.getElementById("qwert").lastElementChild;
+      if (div)
+        div.scrollIntoView({ behavior: 'smooth' })
+    });
+
     onMounted(() => {
       getHistory();
-
     });
 
     socket.on("getSMS", (data) => {
@@ -83,7 +92,6 @@ export default {
         (res) => {
           if (res.data) {
             res.data.history.forEach(n => messages.value.push(n));
-
           }
         }
       );

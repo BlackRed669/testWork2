@@ -46,8 +46,8 @@
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/vue"
 import { ref, reactive, watch } from "vue"
 import EssentialLink from "components/EssentialLink.vue"
-import { useQuery } from "@vue/apollo-composable"
-import gql from "graphql-tag"
+// import { useQuery } from "@vue/apollo-composable"
+// import gql from "graphql-tag"
 import { socket } from "boot/socket";
 
 const { isSignedIn, user, isLoaded } = useUser();
@@ -65,35 +65,12 @@ function appendUser() {
   });
 
   socket.emit("appendUser", variables);
-  getLinks(user.value?.id);
 }
 
-function getLinks(myClerkId) {
-  if (myClerkId) {
-    const variables = reactive({
-      myId: myClerkId,
-    });
-    useQuery(gql`
-      query getAllUsers($myId:String)
-      {
-        getAllUsers (myId: $myId){
-          chatId
-          message
-          icon
-          name
-          id
-          connectUserId
-        }
-      }`, variables,{fetchPolicy: "no-cache"}
-    ).onResult(
-      (res) => {
-        if (res.data) {
-          state.linksList = res.data.getAllUsers;
-        }
-      }
-    );
-  }
-}
+socket.on('getLinks',(data)=>{
+  state.linksList = data;
+});
+
 
 const leftDrawerOpen = ref(false)
 

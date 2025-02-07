@@ -54,24 +54,66 @@ io.on("connection", (socket) => {
 
 
   socket.on("appendUser", async (data) => {
-    let upsert1 = "";
     let users = JSON.parse(data.userValue1);
     if (users) {
+      //Добавление пользователя в бд
       const [user, created] = await User.upsert({
         socketId: socket.id,
         name: users.fullName ?? "NoName",
         clerkId: users.id,
+        active: "Online",
         icon: users.imageUrl,
-      },
-        {
-          clerkId: users.id,
-        }
+      }, {
+        clerkId: users.id,
+      }
         , {
           returning: true,
         }
       );
 
       io.to(socket.id).emit("getUserId", user.id);
+
+      //Получение списка всех чатов
+      let myUser = await User.findOne({
+        where: { clerkId: users.id },
+      });
+
+
+
+      socket.broadcast.emit("on_offline", { online: "Online", id: myUser.id });
+
+      let secondUser = await User.findAll({
+        where: {
+          id: { [Op.ne]: myUser.id },
+        },
+        order: [["updatedAt", "DESC"]],
+      });
+
+
+      let result = [];
+
+
+      for (let u of secondUser) {
+        let chats = await Messages.findOne({
+          where: {
+            [Op.or]: [{ fromId: myUser.id, toId: u.id }, { toId: myUser.id, fromId: u.id }],
+          },
+          order: [["createdAt", "DESC"]],
+        });
+
+        result.push({
+          chatId: chats?.chatId ?? 0,
+          message: chats?.content ?? "",
+          icon: u.icon,
+          name: u.name,
+          id: myUser.id,
+          active: u.active,
+          connectUserId: u.id
+        });
+      }
+
+      io.to(socket.id).emit("getLinks", result);
+
     }
   });
 
@@ -92,8 +134,7 @@ io.on("connection", (socket) => {
       },
     });
 
-    if (findChat)
-    {
+    if (findChat) {
       io.to(socket.id).emit("createChat", findChat);
       io.to(user.socketId).emit("createChat", findChat);
       return;
@@ -103,16 +144,24 @@ io.on("connection", (socket) => {
     let connectUser = data.connectUser;
 
     let result = await Chat.create({ hostUser, connectUser });
-    if (result)
-    {
+
+    if (result) {
       io.to(socket.id).emit("createChat", result);
       io.to(user.socketId).emit("createChat", result);
-      
     }
   });
 
   // Обработка отключения клиента
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async () => {
+    const user = await User.findOne({ //От кого смс
+      where: { socketId: socket.id },
+    });
+    if (user) {
+      user.active = 'Offline';
+      await user.save();
+      socket.broadcast.emit("on_offline", { online: "Offline", id: user.id });
+    }
+
     console.log("User disconnected:", socket.id);
   });
 });

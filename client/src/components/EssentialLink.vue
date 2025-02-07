@@ -9,12 +9,15 @@
         <q-item-label>{{ props.name }}</q-item-label>
         <q-item-label message>{{ props.message }}</q-item-label>
       </q-item-section>
+      <q-item-section>
+        <q-item-label>{{ active }}</q-item-label>
+      </q-item-section>
     </q-item>
   </div>
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { socket } from "boot/socket";
 
@@ -48,10 +51,22 @@ const props = defineProps({
   icon: {
     type: String,
     default: ""
+  },
+
+  active: {
+    type: String,
+    default: ""
   }
 })
 
 let chatId = reactive(props.chatId);
+let active = ref(props.active);
+
+socket.on('on_offline', (data) => {
+  if (props.connectUserId == data.id) {
+    active.value = data.online;
+  }
+});
 
 socket.on("createChat", (data) => {
   if (data.hostUser == props.connectUserId) {

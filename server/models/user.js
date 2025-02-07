@@ -6,6 +6,10 @@ const User = sequelize.define("users", {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    active: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     clerkId: {
         type: DataTypes.STRING,
         allowNull: false,

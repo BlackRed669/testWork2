@@ -5,7 +5,7 @@
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
-          Quasar App
+          Quasar Chat
         </q-toolbar-title>
 
         <SignedOut>
@@ -19,10 +19,9 @@
           Loading...
         </div>
 
-        <div v-else-if="isSignedIn">Hello {{ user?.fullName }} {{ user?.username }}!</div>
+        <div v-else-if="isSignedIn"> {{ user?.fullName ?? user?.username }}</div>
 
         <div v-else>Not signed in</div>
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 

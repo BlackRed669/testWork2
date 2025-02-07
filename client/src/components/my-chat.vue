@@ -1,10 +1,28 @@
 <template>
   <div>
+    <div class="border-bottom">
+      <q-item>
+
+        <q-item-section avatar>
+          <a href="/"><q-btn outline color="primary" label="<" /></a>
+        </q-item-section>
+
+        <q-item-section avatar>
+          <q-img :src="icon" class="circleIcon" />
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label>{{ name }}</q-item-label>
+        </q-item-section>
+
+      </q-item>
+
+    </div>
     <div class="q-pa-md row justify-center">
-      <div style="padding: 10px; width: 100%;  max-height: 500px; overflow: auto;" id="qwert">
+      <div class="divMain" id="chatDiv">
 
         <div v-for="message in this.messages" :key="message.id" :id="message.id" class="justify-end">
-          <q-chat-message :name="message.name" :sent="message.sent">
+          <q-chat-message :sent="message.sent">
             <div>
               {{ message.message }}
             </div>
@@ -37,6 +55,8 @@ export default {
     const myMessage = ref("");
     let messages = ref([]);
     const route = useRoute();
+    let icon = ref("");
+    let name = ref("");
 
     onBeforeRouteUpdate((to, from, next) => {
       next();
@@ -44,7 +64,7 @@ export default {
     });
 
     onUpdated(() => {
-      let div = document.getElementById("qwert").lastElementChild;
+      let div = document.getElementById("chatDiv").lastElementChild;
       if (div)
         div.scrollIntoView({ behavior: 'smooth' })
     });
@@ -87,11 +107,18 @@ export default {
               sent
               name
             }
+            getUser(myId:$myId, chatId:$chatId)
+            {
+              name
+              icon
+            }
           }`, variables
       ).onResult(
         (res) => {
           if (res.data) {
             res.data.history.forEach(n => messages.value.push(n));
+            name.value = res.data.getUser.name;
+            icon.value = res.data.getUser.icon;
           }
         }
       );
@@ -101,8 +128,22 @@ export default {
     return {
       myMessage,
       messages,
+      icon,
+      name,
       sendMessage
     };
   },
 };
 </script>
+
+<style>
+.divMain {
+  padding: 10px;
+  width: 100%;
+  max-height: 500px;
+  overflow: auto;
+}
+.border-bottom{
+  border-bottom: 2px solid #00000011;
+}
+</style>

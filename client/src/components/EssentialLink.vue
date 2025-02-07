@@ -1,8 +1,8 @@
 <template>
   <div @click="createChat">
-    <q-item>
+    <q-item class="clickeble">
       <q-item-section v-if="props.icon" avatar>
-        <q-img :src="props.icon" style="border-radius: 50%;" />
+        <q-img :src="props.icon" class="circleIcon" />
       </q-item-section>
 
       <q-item-section>
@@ -91,3 +91,12 @@ function createChat() {
 }
 
 </script>
+<style>
+.clickeble{
+  cursor: pointer;
+}
+
+.circleIcon{
+  border-radius: 50%;
+}
+</style>
